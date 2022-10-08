@@ -4,6 +4,8 @@ const app = express()
 const cors = require('cors')
 const port = 8000
 const unirest = require('unirest')
+const BASE_URL = 'https://fantasysports.yahooapis.com/fantasy/v2/';
+const LEAGUE_ID = '41527';
 
 app.use(express.json())
 
@@ -39,6 +41,19 @@ app.post('/api/new_token', cors(), (req, res) => {
       'redirect_uri': 'oob',
       'refresh_token': req.body.refreshToken,
       'grant_type': 'refresh_token'
+    })
+    .end(response => {
+      console.log(process.env.CLIENT_ID)
+      res.send(response.body);
+    })
+});
+
+app.get('/api/home', cors(), (req, res) => {
+  unirest
+    .get(`${BASE_URL}league/nba.l.${LEAGUE_ID}`)
+    .headers({
+      'Authorization': 'Bearer ' + req.headers['refreshtoken'],
+      'Content-Type': 'application/x-www-form-urlencoded',
     })
     .end(response => {
       res.send(response.body);
