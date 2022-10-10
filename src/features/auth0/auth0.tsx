@@ -30,6 +30,7 @@ export function Auth0Component() {
 
     const data = await response.json();
     window.localStorage.setItem('refreshToken', data.refresh_token);
+    window.localStorage.setItem('accessToken', data.access_token);
     console.log(data);
   }
 

@@ -17,7 +17,7 @@ export function Home() {
 
     fetch('/api/home', {
       headers: {
-        refreshToken: window.localStorage.getItem('refreshToken') as string
+        accessToken: window.localStorage.getItem('accessToken') as string
       }
     })
       .then(res => res.text())
@@ -26,7 +26,7 @@ export function Home() {
         let leagueInfoObj = xml.children[0].children.filter((item: any) => keynames.includes(item.name));
         console.log(leagueInfoObj)
         setLeagueInfo(leagueInfoObj);
-        if (xml.name === 'yahoo:error') {
+        if (xml.name === 'yahoo:error' && xml.children[0].value.includes('token_expired')) {
           newToken(window.localStorage.getItem('refreshToken') as string);
         }
       })
@@ -43,7 +43,7 @@ export function Home() {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data);
+        window.localStorage.setItem('accessToken', data.access_token);
       })
       .catch(err => console.error(err));
   }

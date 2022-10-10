@@ -43,7 +43,6 @@ app.post('/api/new_token', cors(), (req, res) => {
       'grant_type': 'refresh_token'
     })
     .end(response => {
-      console.log(process.env.CLIENT_ID)
       res.send(response.body);
     })
 });
@@ -52,7 +51,7 @@ app.get('/api/home', cors(), (req, res) => {
   unirest
     .get(`${BASE_URL}league/nba.l.${LEAGUE_ID}`)
     .headers({
-      'Authorization': 'Bearer ' + req.headers['refreshtoken'],
+      'Authorization': 'Bearer ' + req.headers['accesstoken'],
       'Content-Type': 'application/x-www-form-urlencoded',
     })
     .end(response => {
